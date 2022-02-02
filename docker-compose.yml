@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysql:
+    build: ./mysql
+    environment:
+      TZ: Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample-db
+    ports:
+      - 33306:3306
+    volumes:
+      - mysql_volume:/var/lib/mysql
+      # 起動時にDB作成を行う
+      - ./mysql/init:/docker-entrypoint-initdb.d
+
+volumes:
+  mysql_volume:
