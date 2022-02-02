@@ -26,6 +26,17 @@ func (r *TodoRepository) Add(
 	return e.ID, nil
 }
 
+func (r *TodoRepository) Update(
+	ctx *gin.Context,
+	db *gorm.DB,
+	item string,
+) error {
+	if err := db.Model(&entity.Todo{}).Where("item = ?", item).Update("is_done", true).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *TodoRepository) Delete(
 	ctx *gin.Context,
 	db *gorm.DB,

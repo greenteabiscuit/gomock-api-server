@@ -7,12 +7,6 @@ import (
 	"net/http"
 )
 
-type TodoControllerInterface interface {
-	List()
-	Delete()
-	Add()
-}
-
 type TodoController struct {
 	db          *gorm.DB
 	todoUsecase usecases.TodoUsecaseInterface
@@ -35,7 +29,7 @@ func NewTodoController(db *gorm.DB, todoUsecaseInterface usecases.TodoUsecaseInt
 func (t *TodoController) List(ctx *gin.Context) {
 	models, err := t.todoUsecase.FindAllTodos(ctx, t.db)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, "bad request")
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 	var lis []TodoResponse
@@ -55,7 +49,7 @@ func (t *TodoController) Delete(ctx *gin.Context) {
 	var dr DeleteRequest
 	ctx.BindJSON(&dr)
 	if err := t.todoUsecase.DeleteTodo(ctx, t.db, dr.ID); err != nil {
-		ctx.JSON(http.StatusInternalServerError, "bad request")
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 	ctx.JSON(http.StatusOK, "delete success")
@@ -70,8 +64,23 @@ func (t *TodoController) Add(ctx *gin.Context) {
 	ctx.BindJSON(&ar)
 	ID, err := t.todoUsecase.AddTodos(ctx, t.db, ar.Item)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, "bad request")
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 	ctx.JSON(http.StatusOK, ID)
+}
+
+type UpdateRequest struct {
+	Item string `json: "item"`
+}
+
+func (t *TodoController) Update(ctx *gin.Context)  {
+	var ur UpdateRequest
+	ctx.BindJSON(&ur)
+	err := t.todoUsecase.UpdateTodos(ctx, t.db, ur.Item)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	ctx.JSON(http.StatusOK, "update success")
 }

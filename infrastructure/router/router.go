@@ -33,6 +33,7 @@ func (router *Router) InitRouter(db *gorm.DB) *gin.Engine {
 			todo.GET("/list", todoController.List)
 			todo.DELETE("/delete", todoController.Delete)
 			todo.POST("/add", todoController.Add)
+			todo.POST("/update", todoController.Update)
 		}
 
 	}

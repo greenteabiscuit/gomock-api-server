@@ -17,6 +17,9 @@ type TodoUsecaseInterface interface {
 	AddTodos(
 		ctx *gin.Context, db *gorm.DB, item string,
 	) (int, error)
+	UpdateTodos(
+		ctx *gin.Context, db *gorm.DB, item string,
+	) error
 }
 
 // TodoUsecase is
@@ -43,4 +46,10 @@ func (t *TodoUsecase) AddTodos(
 	ctx *gin.Context, db *gorm.DB, item string,
 ) (int, error) {
 	return t.todoRepository.Add(ctx, db, item)
+}
+
+func (t *TodoUsecase) UpdateTodos(
+	ctx *gin.Context, db *gorm.DB, item string,
+) error {
+	return t.todoRepository.Update(ctx, db, item)
 }
