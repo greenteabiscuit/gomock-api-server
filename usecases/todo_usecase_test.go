@@ -14,11 +14,11 @@ func TestList(t *testing.T) {
 		in []*model.Todo
 	} {
 		{
-			"No results returned",
+			"Expect no results to return",
 			nil,
 		},
 		{
-			"2 results returned",
+			"Expect 2 results to return",
 			[]*model.Todo{
 					{
 						ID: 1,
