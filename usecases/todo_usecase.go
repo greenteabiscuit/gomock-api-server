@@ -12,11 +12,11 @@ type TodoUsecaseInterface interface {
 		ctx *gin.Context, db *gorm.DB,
 	) ([]*model.Todo, error)
 	DeleteTodo(
-		ctx *gin.Context,
+		ctx *gin.Context, db *gorm.DB, ID int,
 	) error
 	AddTodos(
-		ctx *gin.Context,
-	) error
+		ctx *gin.Context, db *gorm.DB,
+	) (int, error)
 }
 
 // TodoUsecase is
@@ -35,12 +35,12 @@ func (t *TodoUsecase) FindAllTodos(ctx *gin.Context, db *gorm.DB) ([]*model.Todo
 	return t.todoRepository.List(ctx, db)
 }
 
-func (t *TodoUsecase) DeleteTodo(ctx *gin.Context) error {
-	return nil
+func (t *TodoUsecase) DeleteTodo(ctx *gin.Context, db *gorm.DB, ID int) error {
+	return t.todoRepository.Delete(ctx, db, ID)
 }
 
 func (t *TodoUsecase) AddTodos(
-	ctx *gin.Context,
-) error {
-	return nil
+	ctx *gin.Context, db *gorm.DB,
+) (int, error) {
+	return t.todoRepository.Add(ctx, db)
 }

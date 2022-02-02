@@ -28,8 +28,9 @@ func (r *TodoRepository) Add(
 func (r *TodoRepository) Delete(
 	ctx *gin.Context,
 	db *gorm.DB,
+	ID int,
 ) error {
-	e := entity.Todo{ID: 1, Item: "Homework", IsDone: false}
+	e := entity.Todo{ID: ID, Item: "Homework", IsDone: false}
 	if err := db.Delete(&e).Error; err != nil {
 		return err
 	}

@@ -47,6 +47,25 @@ func (t *TodoController) List(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
-func (t *TodoController) Delete(ctx *gin.Context) {}
+type DeleteRequest struct {
+	ID int `json: "id"`
+}
 
-func (t *TodoController) Add(ctx *gin.Context) {}
+func (t *TodoController) Delete(ctx *gin.Context) {
+	var dr DeleteRequest
+	ctx.BindJSON(&dr)
+	if err := t.todoUsecase.DeleteTodo(ctx, t.db, dr.ID); err != nil {
+		ctx.JSON(http.StatusInternalServerError, "bad request")
+		return
+	}
+	ctx.JSON(http.StatusOK, "delete success")
+}
+
+func (t *TodoController) Add(ctx *gin.Context) {
+	ID, err := t.todoUsecase.AddTodos(ctx, t.db)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, "bad request")
+		return
+	}
+	ctx.JSON(http.StatusOK, ID)
+}
