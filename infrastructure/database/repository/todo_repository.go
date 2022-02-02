@@ -17,8 +17,9 @@ func NewTodoRepository() *TodoRepository {
 func (r *TodoRepository) Add(
 	ctx *gin.Context,
 	db *gorm.DB,
+	item string,
 ) (int, error) {
-	e := entity.Todo{Item: "Homework", IsDone: false}
+	e := entity.Todo{Item: item, IsDone: false}
 	if err := db.Create(&e).Error; err != nil {
 		return 0, err
 	}

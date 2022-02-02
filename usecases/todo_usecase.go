@@ -15,7 +15,7 @@ type TodoUsecaseInterface interface {
 		ctx *gin.Context, db *gorm.DB, ID int,
 	) error
 	AddTodos(
-		ctx *gin.Context, db *gorm.DB,
+		ctx *gin.Context, db *gorm.DB, item string,
 	) (int, error)
 }
 
@@ -40,7 +40,7 @@ func (t *TodoUsecase) DeleteTodo(ctx *gin.Context, db *gorm.DB, ID int) error {
 }
 
 func (t *TodoUsecase) AddTodos(
-	ctx *gin.Context, db *gorm.DB,
+	ctx *gin.Context, db *gorm.DB, item string,
 ) (int, error) {
-	return t.todoRepository.Add(ctx, db)
+	return t.todoRepository.Add(ctx, db, item)
 }

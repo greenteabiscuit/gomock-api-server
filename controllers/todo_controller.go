@@ -61,8 +61,14 @@ func (t *TodoController) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, "delete success")
 }
 
+type AddRequest struct {
+	Item string `json: "item"`
+}
+
 func (t *TodoController) Add(ctx *gin.Context) {
-	ID, err := t.todoUsecase.AddTodos(ctx, t.db)
+	var ar AddRequest
+	ctx.BindJSON(&ar)
+	ID, err := t.todoUsecase.AddTodos(ctx, t.db, ar.Item)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, "bad request")
 		return
